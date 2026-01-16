@@ -5,7 +5,7 @@ import time
 #__________Simulation Setup__________
 print("====================Starting Simulation====================")
 physicsClient = p.connect(p.GUI)
-p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
+#p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
 print("===========================================================")
 
 #__________Simulation Loop__________
