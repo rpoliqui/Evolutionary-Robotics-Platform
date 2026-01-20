@@ -7,6 +7,8 @@ print("====================Starting Simulation====================")
 physicsClient = p.connect(p.GUI)
 #p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
 print("===========================================================")
+# Load the world file
+p.loadSDF("box.sdf")
 
 #__________Simulation Loop__________
 for step in range(1000):
