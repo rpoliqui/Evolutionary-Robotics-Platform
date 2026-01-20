@@ -4,7 +4,7 @@ import pybullet_data
 import time
 
 #__________Simulation Setup__________
-print("====================Starting Simulation====================")
+print("\n====================Starting Simulation====================")
 # Connect to GUI
 physicsClient = p.connect(p.GUI)
 
@@ -13,7 +13,7 @@ p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
 # Uncomment line below to enable debug graphics
 #p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
-print("===========================================================")
+print("===========================================================\n")
 
 # Define gravity force
 p.setGravity(0,0,-9.8)
@@ -30,6 +30,6 @@ for step in range(1000):
     time.sleep(1./1000.)
 
 #_________Simulation End__________
-print("=====================Ending Simulation=====================")
+print("\n=====================Ending Simulation=====================")
 p.disconnect()
-print("===========================================================")
+print("===========================================================\n")

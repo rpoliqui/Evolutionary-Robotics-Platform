@@ -4,7 +4,18 @@ import pyrosim.pyrosim as pyrosim
 pyrosim.Start_SDF("box.sdf")
 
 #__________Add a Box to the World__________
-pyrosim.Send_Cube(name="Box", pos=[0,0,0.5] , size=[1,1,1])
+# Define Box Dimensions
+length = 1
+width = 2
+height = 3
+
+# Define Box Location
+x = 0
+y = 0
+z = height/2
+
+# Create the cube object
+pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
 
 #__________Close the World File__________
 pyrosim.End()
