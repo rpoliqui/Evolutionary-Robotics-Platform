@@ -3,6 +3,10 @@ import pybullet as p
 import pybullet_data
 import time
 
+#__________Global Variables__________
+debug_mode = True
+world_file = "boxes.sdf"
+
 #__________Simulation Setup__________
 print("\n====================Starting Simulation====================")
 # Connect to GUI
@@ -11,8 +15,9 @@ physicsClient = p.connect(p.GUI)
 # Define data path for additional objects (Floor Plane)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
-# Uncomment line below to enable debug graphics
-#p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
+# Enter debug visuals if in debug mode
+if debug_mode:
+    p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
 print("===========================================================\n")
 
 # Define gravity force
@@ -21,7 +26,7 @@ p.setGravity(0,0,-9.8)
 planeId = p.loadURDF("plane.urdf")
 
 # Load the world file
-p.loadSDF("box.sdf")
+p.loadSDF(world_file)
 
 #__________Simulation Loop__________
 for step in range(1000):
