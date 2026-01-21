@@ -29,10 +29,10 @@ planeId = p.loadURDF("plane.urdf")
 p.loadSDF(world_file)
 
 #__________Simulation Loop__________
-for step in range(1000):
+for step in range(2000):
     p.stepSimulation()
     print(step)
-    time.sleep(1./1000.)
+    time.sleep(1./60.)
 
 #_________Simulation End__________
 print("\n=====================Ending Simulation=====================")

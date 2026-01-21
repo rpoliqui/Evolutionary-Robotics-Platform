@@ -14,13 +14,24 @@ x = 0
 y = 0
 z = height/2
 
-# Create the cube object
-pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
+# Create the cube objects
+for i in range(5):
+    for j in range(5):
+        for k in range(10):
+            pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
+            last_height = height
+            length *= 0.9
+            width *= 0.9
+            height *= 0.9
+            z += (last_height + height)/2
+        y += 1
+        length = 1
+        width = 1
+        height = 1
+        z = height/2
+    x += 1
+    y = 0
 
-x += 1
-y = 0
-z += 1
-pyrosim.Send_Cube(name="Box2", pos=[x,y,z] , size=[length,width,height])
 
 #__________Close the World File__________
 pyrosim.End()
