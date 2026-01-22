@@ -5,7 +5,7 @@ import time
 
 #__________Global Variables__________
 debug_mode = True
-world_file = "boxes.sdf"
+world_file = "world.sdf"
 
 #__________Simulation Setup__________
 print("\n====================Starting Simulation====================")
@@ -38,3 +38,4 @@ for step in range(2000):
 print("\n=====================Ending Simulation=====================")
 p.disconnect()
 print("===========================================================\n")
+
