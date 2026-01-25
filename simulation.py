@@ -6,6 +6,7 @@ import time
 #__________Global Variables__________
 debug_mode = True
 world_file = "world.sdf"
+robot_file = "body.urdf"
 
 #__________Simulation Setup__________
 print("\n====================Starting Simulation====================")
@@ -24,6 +25,8 @@ print("===========================================================\n")
 p.setGravity(0,0,-9.8)
 # Define floor normal force
 planeId = p.loadURDF("plane.urdf")
+# Load robot into the environment
+robotId = p.loadURDF(robot_file)
 
 # Load the world file
 p.loadSDF(world_file)
