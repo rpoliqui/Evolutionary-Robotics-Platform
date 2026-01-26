@@ -46,9 +46,28 @@ frontLegSensorValues = numpy.zeros(loop_iterations)
 #__________Simulation Loop__________
 #=================================================================================================================
 for step in range(loop_iterations):
+    # Step Simulation
     p.stepSimulation()
+
+    # Read Sensor Data
     backLegSensorValues[step] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
     frontLegSensorValues[step] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
+
+    # Update Motors
+    pyrosim.Set_Motor_For_Joint(
+        bodyIndex=robotId,
+        jointName=b'Torso_BackLeg',
+        controlMode=p.POSITION_CONTROL,
+        targetPosition=-numpy.pi/6.0,
+        maxForce=500)
+    pyrosim.Set_Motor_For_Joint(
+        bodyIndex=robotId,
+        jointName=b'Torso_FrontLeg',
+        controlMode=p.POSITION_CONTROL,
+        targetPosition=numpy.pi/6.0,
+        maxForce=500)
+
+    # Sleep
     time.sleep(1./60.)
 
 #_________Simulation End__________
