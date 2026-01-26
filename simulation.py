@@ -1,14 +1,18 @@
 #__________Import Statements__________
 import pybullet as p
 import pybullet_data
+import pyrosim.pyrosim as pyrosim
 import time
+import numpy
 
 #__________Global Variables__________
 debug_mode = True
+loop_iterations = 1000
 world_file = "world.sdf"
 robot_file = "body.urdf"
 
 #__________Simulation Setup__________
+#=================================================================================================================
 print("\n====================Starting Simulation====================")
 # Connect to GUI
 physicsClient = p.connect(p.GUI)
@@ -25,20 +29,30 @@ print("===========================================================\n")
 p.setGravity(0,0,-9.8)
 # Define floor normal force
 planeId = p.loadURDF("plane.urdf")
+
 # Load robot into the environment
 robotId = p.loadURDF(robot_file)
 
 # Load the world file
 p.loadSDF(world_file)
 
+# Prepare the robot for simulation
+pyrosim.Prepare_To_Simulate(robotId)
+
+# Create vector to store sensor data
+backLegSensorValues = numpy.zeros(loop_iterations)
+
 #__________Simulation Loop__________
-for step in range(2000):
+#=================================================================================================================
+for step in range(loop_iterations):
     p.stepSimulation()
-    print(step)
+    backLegSensorValues[step] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
     time.sleep(1./60.)
 
 #_________Simulation End__________
+#=================================================================================================================
 print("\n=====================Ending Simulation=====================")
+print(backLegSensorValues)
 p.disconnect()
 print("===========================================================\n")
 
