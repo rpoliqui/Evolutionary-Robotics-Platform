@@ -4,6 +4,7 @@ import pybullet_data
 import pyrosim.pyrosim as pyrosim
 import time
 import numpy
+import random
 
 #__________Global Variables__________
 debug_mode = True
@@ -58,17 +59,17 @@ for step in range(loop_iterations):
         bodyIndex=robotId,
         jointName=b'Torso_BackLeg',
         controlMode=p.POSITION_CONTROL,
-        targetPosition=-numpy.pi/6.0,
-        maxForce=500)
+        targetPosition=(numpy.pi*random.random()) - (numpy.pi/2),
+        maxForce=50)
     pyrosim.Set_Motor_For_Joint(
         bodyIndex=robotId,
         jointName=b'Torso_FrontLeg',
         controlMode=p.POSITION_CONTROL,
-        targetPosition=numpy.pi/6.0,
-        maxForce=500)
+        targetPosition=(numpy.pi*random.random()) - (numpy.pi/2),
+        maxForce=50)
 
     # Sleep
-    time.sleep(1./60.)
+    time.sleep(1./100000.)
 
 #_________Simulation End__________
 #=================================================================================================================
