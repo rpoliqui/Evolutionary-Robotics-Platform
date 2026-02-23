@@ -39,11 +39,13 @@ class SIMULATION:
     def Run(self):
         #__________Simulation Loop__________
         #=================================================================================================================
-        for step in range(c.loop_iterations):
+        for t in range(c.loop_iterations):
             # Step Simulation
             p.stepSimulation()
 
-            print(step)
+            self.robot.Sense(t)
+
+            print(t)
 
             # # Read Sensor Data
             # backLegSensorValues[step] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")

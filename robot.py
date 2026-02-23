@@ -6,11 +6,11 @@ import constants as c
 import time
 import numpy
 import random
+from sensor import SENSOR
 
 class ROBOT:
 
     def __init__(self, robot_file):
-        self.sensors = {}
         self.motors = {}
 
         # Load robot into the environment
@@ -18,3 +18,15 @@ class ROBOT:
 
         # Prepare the robot for simulation
         pyrosim.Prepare_To_Simulate(self.robotId)
+
+        self.Prepare_To_Sense()
+
+    def Prepare_To_Sense(self):
+        self.sensors = {}
+
+        for linkName in pyrosim.linkNamesToIndices:
+            self.sensors[linkName] = SENSOR(linkName)
+
+    def Sense(self, t):
+        for sensor in self.sensors:
+            self.sensors[sensor].Get_Value(t)

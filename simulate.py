@@ -8,7 +8,7 @@ simulation.Run()
 
 #
 # # Create vector to store sensor data
-# backLegSensorValues = numpy.zeros(c.loop_iterations)
+#
 # frontLegSensorValues = numpy.zeros(c.loop_iterations)
 #
 # # Define sinusoidal array
