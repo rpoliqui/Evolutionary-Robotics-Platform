@@ -1,11 +1,8 @@
 #__________Import Statements__________
 import pybullet as p
 import pybullet_data
-import pyrosim.pyrosim as pyrosim
 import constants as c
 import time
-import numpy
-import random
 from world import WORLD
 from robot import ROBOT
 
@@ -45,25 +42,9 @@ class SIMULATION:
 
             self.robot.Sense(t)
 
-            print(t)
+            self.robot.Act(t)
 
-            # # Read Sensor Data
-            # backLegSensorValues[step] = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
-            # frontLegSensorValues[step] = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
-            #
-            # # Update Motors
-            # pyrosim.Set_Motor_For_Joint(
-            #     bodyIndex=robotId,
-            #     jointName=b'Torso_BackLeg',
-            #     controlMode=p.POSITION_CONTROL,
-            #     targetPosition=BackLeg_targetAngles[step],
-            #     maxForce=c.max_joint_force)
-            # pyrosim.Set_Motor_For_Joint(
-            #     bodyIndex=robotId,
-            #     jointName=b'Torso_FrontLeg',
-            #     controlMode=p.POSITION_CONTROL,
-            #     targetPosition=FrontLeg_targetAngles[step],
-            #     maxForce=c.max_joint_force)
+            print(t)
 
             # Sleep
             time.sleep(c.loop_delay)
