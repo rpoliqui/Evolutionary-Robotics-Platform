@@ -42,9 +42,11 @@ class SIMULATION:
 
             self.robot.Sense(t)
 
+            self.robot.Think()
+
             self.robot.Act(t)
 
-            print(t)
+            #print(t)
 
             # Sleep
             time.sleep(c.loop_delay)
