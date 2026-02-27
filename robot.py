@@ -48,23 +48,3 @@ class ROBOT:
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName).encode("utf-8")
                 desiredAngle = self.nn.Get_Value_Of(neuronName)
                 self.motors[jointName].Set_Value(self.robotId, desiredAngle)
-                print(neuronName, jointName, desiredAngle)
-
-        # for motor in self.motors:
-        #     self.motors[motor].Set_Value(self.robotId, t)
-
-    def Save_Values(self):
-        for sensor in self.sensors:
-            numpy.save(f"data\sensor_{self.sensors[sensor]}", self.sensors[sensor].Get_Value())
-        # # numpy.save("data\BackLegTargetAngles.npy", BackLeg_targetAngles)
-        # # numpy.save("data\FrontLegTargetAngles.npy", FrontLeg_targetAngles)
-        #
-
-        #
-        # #_________Simulation End__________
-        # #=================================================================================================================
-        # print("\n=====================Ending Simulation=====================")
-        #
-        # numpy.save("data\FrontLegSensorValues.npy", frontLegSensorValues)
-        # print("===========================================================\n")
-        #
