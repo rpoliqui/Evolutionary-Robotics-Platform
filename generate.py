@@ -1,5 +1,6 @@
 # __________Import Statements__________
 import pyrosim.pyrosim as pyrosim
+import random
 
 # __________Global Variables_________
 # Define Box Dimensions
@@ -51,10 +52,16 @@ def Generate_Brain():
     pyrosim.Send_Motor_Neuron(name=4, jointName="Torso_FrontLeg")
 
     # __________Create Synapses__________
-    pyrosim.Send_Synapse(sourceNeuronName=1, targetNeuronName=3, weight=0.5)
-    pyrosim.Send_Synapse(sourceNeuronName=2, targetNeuronName=3, weight=-1)
-    pyrosim.Send_Synapse(sourceNeuronName=1, targetNeuronName=4, weight=-1)
-    pyrosim.Send_Synapse(sourceNeuronName=2, targetNeuronName=4, weight=0.5)
+    # pyrosim.Send_Synapse(sourceNeuronName=1, targetNeuronName=3, weight=0.5)
+    # pyrosim.Send_Synapse(sourceNeuronName=2, targetNeuronName=3, weight=-1)
+    # pyrosim.Send_Synapse(sourceNeuronName=1, targetNeuronName=4, weight=-1)
+    # pyrosim.Send_Synapse(sourceNeuronName=2, targetNeuronName=4, weight=0.5)
+
+    for sensor in range(0,3):
+        for motor in range(3,5):
+            pyrosim.Send_Synapse(sourceNeuronName=sensor, targetNeuronName=motor, weight=(2*random.random())-1)
+
+
 
     # __________Close the Robot File__________
     pyrosim.End()
