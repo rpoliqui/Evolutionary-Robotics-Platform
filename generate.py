@@ -43,11 +43,18 @@ def Generate_Brain():
     # __________Name of file to store robot information__________
     pyrosim.Start_NeuralNetwork("brain.nndf")
 
+    # __________Create Neurons__________
     pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
     pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
     pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")
     pyrosim.Send_Motor_Neuron(name=3, jointName="Torso_BackLeg")
     pyrosim.Send_Motor_Neuron(name=4, jointName="Torso_FrontLeg")
+
+    # __________Create Synapses__________
+    pyrosim.Send_Synapse(sourceNeuronName=1, targetNeuronName=3, weight=1)
+    pyrosim.Send_Synapse(sourceNeuronName=2, targetNeuronName=3, weight=1)
+    pyrosim.Send_Synapse(sourceNeuronName=1, targetNeuronName=4, weight=1)
+    pyrosim.Send_Synapse(sourceNeuronName=2, targetNeuronName=4, weight=1)
 
     # __________Close the Robot File__________
     pyrosim.End()
