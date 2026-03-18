@@ -14,6 +14,7 @@ class SIMULATION:
         self.robot_file = "body.urdf"
 
         # Connect to GUI
+        self.directOrGUI = directOrGUI
         if directOrGUI == "DIRECT":
             self.physicsClient = p.connect(p.DIRECT)
         else:
@@ -49,10 +50,12 @@ class SIMULATION:
 
             self.robot.Act(t)
 
+
             #print(t)
 
             # Sleep
-            # time.sleep(c.loop_delay)
+            if self.directOrGUI == 'GUI':
+                time.sleep(c.loop_delay)
 
     def Get_Fitness(self):
         self.robot.Get_Fitness()

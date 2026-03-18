@@ -8,16 +8,20 @@ class HILL_CLIMBER:
         self.parent = SOLUTION()
 
     def Evolve(self):
-        self.parent.Evaluate()
+        self.parent.Evaluate("GUI")
+
         for currentGeneration in range(c.numberOfGenerations):
             self.Evolve_For_One_Generation()
+
+        self.Show_Best()
+
+    def Show_Best(self):
+        self.parent.Evaluate("GUI")
 
     def Evolve_For_One_Generation(self):
         self.Spawn()
         self.Mutate()
-        self.child.Evaluate()
-        print("")
-        print(self.parent.fitness, self.child.fitness)
+        self.child.Evaluate("DIRECT")
         self.Select()
 
     def Spawn(self):
@@ -27,5 +31,7 @@ class HILL_CLIMBER:
         self.child.Mutate()
 
     def Select(self):
-        if self.parent.fitness > self.child.fitness:
-            self.parent = self.child
+        print("")
+        print(self.parent.fitness,self.child.fitness)
+        if self.child.fitness <= self.parent.fitness:
+            self.parent = copy.deepcopy(self.child)

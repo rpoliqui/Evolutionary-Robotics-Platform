@@ -19,15 +19,18 @@ class SOLUTION:
         self.weights = numpy.random.rand(3, 2)
         self.weights = self.weights * 2 - 1
 
-    def Evaluate(self):
+    def Evaluate(self, directOrGui):
         self.Create_World()
         self.Create_Brain()
         self.Create_Body()
 
-        os.system("python3 simulate.py DIRECT")
+        if directOrGui == 'DIRECT':
+            os.system("python3 simulate.py DIRECT")
+        elif directOrGui == 'GUI':
+            os.system("python3 simulate.py GUI")
 
         fitnessFile = open("fitness.txt")
-        self.fitness = fitnessFile.read()
+        self.fitness = float(fitnessFile.read())
         fitnessFile.close()
 
     def Create_World(self):
