@@ -8,13 +8,16 @@ from robot import ROBOT
 
 class SIMULATION:
 
-    def __init__(self):
+    def __init__(self, directOrGUI):
         self.debug_mode = True
         self.world_file = "world.sdf"
         self.robot_file = "body.urdf"
 
         # Connect to GUI
-        self.physicsClient = p.connect(p.GUI)
+        if directOrGUI == "DIRECT":
+            self.physicsClient = p.connect(p.DIRECT)
+        else:
+            self.physicsClient = p.connect(p.GUI)
 
         # Define data path for additional objects (Floor Plane)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -49,7 +52,7 @@ class SIMULATION:
             #print(t)
 
             # Sleep
-            time.sleep(c.loop_delay)
+            # time.sleep(c.loop_delay)
 
     def Get_Fitness(self):
         self.robot.Get_Fitness()

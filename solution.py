@@ -1,4 +1,5 @@
 import numpy
+import random
 import os
 from pyrosim import pyrosim
 
@@ -23,7 +24,11 @@ class SOLUTION:
         self.Create_Brain()
         self.Create_Body()
 
-        os.system("python3 simulate.py")
+        os.system("python3 simulate.py DIRECT")
+
+        fitnessFile = open("fitness.txt")
+        self.fitness = fitnessFile.read()
+        fitnessFile.close()
 
     def Create_World(self):
         # __________Name of file to store world information__________
@@ -75,3 +80,8 @@ class SOLUTION:
 
         # __________Close the Robot File__________
         pyrosim.End()
+
+    def Mutate(self):
+        randomRow = random.randint(0, 2)
+        randomColumn = random.randint(0, 1)
+        self.weights[randomRow, randomColumn] = random.random() * 2 - 1

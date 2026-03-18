@@ -13,3 +13,6 @@ phaseOffset = 0
 
 #==================== Environment Constants ====================
 gravity = 9.8
+
+#==================== Evolution Constants ====================
+numberOfGenerations = 10
