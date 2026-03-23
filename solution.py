@@ -1,6 +1,7 @@
 import numpy
 import random
 import os
+import time
 from pyrosim import pyrosim
 
 # __________Global Variables_________
@@ -15,23 +16,29 @@ z = height / 2
 
 class SOLUTION:
 
-    def __init__(self):
+    def __init__(self, ID):
         self.weights = numpy.random.rand(3, 2)
         self.weights = self.weights * 2 - 1
+        self.myID = ID
 
-    def Evaluate(self, directOrGui):
+    def Start_Simulation(self, directOrGui):
         self.Create_World()
         self.Create_Brain()
         self.Create_Body()
 
-        if directOrGui == 'DIRECT':
-            os.system("python3 simulate.py DIRECT")
-        elif directOrGui == 'GUI':
-            os.system("python3 simulate.py GUI")
+        os.system("start /B python3 simulate.py " + directOrGui + " " + str(self.myID))
 
-        fitnessFile = open("fitness.txt")
+    def Wait_For_Simulation_To_End(self):
+        fitnessFileName = f"fitness{self.myID}.txt"
+
+        while not os.path.exists(fitnessFileName):
+            time.sleep(0.01)
+
+        fitnessFile = open(fitnessFileName)
         self.fitness = float(fitnessFile.read())
         fitnessFile.close()
+        os.system(f"del {fitnessFileName}")
+
 
     def Create_World(self):
         # __________Name of file to store world information__________
@@ -42,6 +49,10 @@ class SOLUTION:
 
         # __________Close the World File__________
         pyrosim.End()
+
+        # __________Make Sure File Exists__________
+        while not os.path.exists("world.sdf"):
+            time.sleep(0.01)
 
     def Create_Body(self):
         # __________Name of file to store robot information__________
@@ -60,9 +71,13 @@ class SOLUTION:
         # __________Close the Robot File__________
         pyrosim.End()
 
+        # __________Make Sure File Exists__________
+        while not os.path.exists("body.urdf"):
+            time.sleep(0.01)
+
     def Create_Brain(self):
         # __________Name of file to store robot information__________
-        pyrosim.Start_NeuralNetwork("brain.nndf")
+        pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
 
         # __________Create Neurons__________
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
@@ -84,7 +99,14 @@ class SOLUTION:
         # __________Close the Robot File__________
         pyrosim.End()
 
+        # __________Make Sure File Exists__________
+        while not os.path.exists(f"brain{self.myID}.nndf"):
+            time.sleep(0.01)
+
     def Mutate(self):
         randomRow = random.randint(0, 2)
         randomColumn = random.randint(0, 1)
         self.weights[randomRow, randomColumn] = random.random() * 2 - 1
+
+    def Set_ID(self, ID):
+        self.myID = ID

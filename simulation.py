@@ -8,7 +8,7 @@ from robot import ROBOT
 
 class SIMULATION:
 
-    def __init__(self, directOrGUI):
+    def __init__(self, directOrGUI, solutionID):
         self.debug_mode = True
         self.world_file = "world.sdf"
         self.robot_file = "body.urdf"
@@ -35,7 +35,7 @@ class SIMULATION:
         self.world = WORLD(self.world_file)
 
         # Create Robot
-        self.robot = ROBOT(self.robot_file)
+        self.robot = ROBOT(self.robot_file, solutionID)
 
     def Run(self):
         #__________Simulation Loop__________

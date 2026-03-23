@@ -15,4 +15,5 @@ phaseOffset = 0
 gravity = 9.8
 
 #==================== Evolution Constants ====================
-numberOfGenerations = 50
+numberOfGenerations = 10
+populationSize = 10
