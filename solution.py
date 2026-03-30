@@ -45,9 +45,6 @@ class SOLUTION:
         # __________Name of file to store world information__________
         pyrosim.Start_SDF("world.sdf")
 
-        # __________Add a Box to the World__________
-        pyrosim.Send_Cube(name="Box", pos=[-2, 2, z], size=[length, width, height])
-
         # __________Close the World File__________
         pyrosim.End()
 
@@ -100,22 +97,18 @@ class SOLUTION:
 
         # __________Create Neurons__________
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
-        pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLeg")
-        pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLeg")
-        pyrosim.Send_Sensor_Neuron(name=3, linkName="LeftLeg")
-        pyrosim.Send_Sensor_Neuron(name=4, linkName="RightLeg")
-        pyrosim.Send_Sensor_Neuron(name=5, linkName="BackLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name=6, linkName="FrontLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name=7, linkName="LeftLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name=8, linkName="RightLowerLeg")
-        pyrosim.Send_Motor_Neuron(name=9, jointName="Torso_BackLeg")
-        pyrosim.Send_Motor_Neuron(name=10, jointName="Torso_FrontLeg")
-        pyrosim.Send_Motor_Neuron(name=11, jointName="Torso_LeftLeg")
-        pyrosim.Send_Motor_Neuron(name=12, jointName="Torso_RightLeg")
-        pyrosim.Send_Motor_Neuron(name=13, jointName="BackLeg_BackLowerLeg")
-        pyrosim.Send_Motor_Neuron(name=14, jointName="FrontLeg_FrontLowerLeg")
-        pyrosim.Send_Motor_Neuron(name=15, jointName="LeftLeg_LeftLowerLeg")
-        pyrosim.Send_Motor_Neuron(name=16, jointName="RightLeg_RightLowerLeg")
+        pyrosim.Send_Sensor_Neuron(name=1, linkName="BackLowerLeg")
+        pyrosim.Send_Sensor_Neuron(name=2, linkName="FrontLowerLeg")
+        pyrosim.Send_Sensor_Neuron(name=3, linkName="LeftLowerLeg")
+        pyrosim.Send_Sensor_Neuron(name=4, linkName="RightLowerLeg")
+        pyrosim.Send_Motor_Neuron(name=5, jointName="Torso_BackLeg")
+        pyrosim.Send_Motor_Neuron(name=6, jointName="Torso_FrontLeg")
+        pyrosim.Send_Motor_Neuron(name=7, jointName="Torso_LeftLeg")
+        pyrosim.Send_Motor_Neuron(name=8, jointName="Torso_RightLeg")
+        pyrosim.Send_Motor_Neuron(name=9, jointName="BackLeg_BackLowerLeg")
+        pyrosim.Send_Motor_Neuron(name=10, jointName="FrontLeg_FrontLowerLeg")
+        pyrosim.Send_Motor_Neuron(name=11, jointName="LeftLeg_LeftLowerLeg")
+        pyrosim.Send_Motor_Neuron(name=12, jointName="RightLeg_RightLowerLeg")
 
         # __________Create Synapses__________
         for currentRow in range(0, c.numSensorNeurons):
