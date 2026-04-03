@@ -20,5 +20,5 @@ motorJointRange = 0.2
 gravity = 9.8
 
 #==================== Evolution Constants ====================
-numberOfGenerations = 1
-populationSize = 1
+numberOfGenerations = 10
+populationSize = 10

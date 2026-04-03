@@ -18,11 +18,11 @@ class PARALLEL_HILL_CLIMBER:
              self.Evolve_For_One_Generation()
 
     def Show_Best(self):
-        min_fitness = float("inf")
+        max_fitness = float("-inf")
         best_solution = 0
         for parent in self.parents.values():
-            if parent.fitness < min_fitness:
-                min_fitness = parent.fitness
+            if parent.fitness > max_fitness:
+                max_fitness = parent.fitness
                 best_solution = parent
         best_solution.Start_Simulation("GUI")
         best_solution.Wait_For_Simulation_To_End()
@@ -54,7 +54,7 @@ class PARALLEL_HILL_CLIMBER:
 
     def Select(self):
         for key in self.parents:
-            if self.children[key].fitness <= self.parents[key].fitness:
+            if self.children[key].fitness >= self.parents[key].fitness:
                 self.parents[key] = copy.deepcopy(self.children[key])
 
     def Print(self):
