@@ -162,7 +162,7 @@ def Send_Sphere(name="default",pos=[0,0,0],radius=1):
     
         links.append(link)
     else:
-        link = LINK_URDF("sphere",name,pos,radius)
+        link = LINK_URDF(name,pos,radius)
         
         links.append(link)
     
