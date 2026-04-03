@@ -15,7 +15,7 @@ class PARALLEL_HILL_CLIMBER:
         self.Evaluate(self.parents)
 
         for currentGeneration in range(c.numberOfGenerations):
-             self.Evolve_For_One_Generation()
+             self.Evolve_For_One_Generation(currentGeneration)
 
     def Show_Best(self):
         max_fitness = float("-inf")
@@ -27,11 +27,12 @@ class PARALLEL_HILL_CLIMBER:
         best_solution.Start_Simulation("GUI")
         best_solution.Wait_For_Simulation_To_End()
 
-    def Evolve_For_One_Generation(self):
+    def Evolve_For_One_Generation(self, currentGeneration):
         self.Spawn()
         self.Mutate()
         self.Evaluate(self.children)
         self.Print()
+        print(f"Generation {currentGeneration} of {c.numberOfGenerations}")
         self.Select()
 
     def Spawn(self):

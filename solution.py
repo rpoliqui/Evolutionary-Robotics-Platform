@@ -12,6 +12,8 @@ class SOLUTION:
         self.weights = self.weights * 2 - 1
         self.myID = ID
 
+        self.start_position = -5
+
         # Body Variables
         self.torso_width = 0.75
         self.torso_height = 1
@@ -82,20 +84,20 @@ class SOLUTION:
         pyrosim.Start_URDF(f"body{self.myID}.urdf")
 
         # __________Create the Root (Torso)__________
-        pyrosim.Send_Cube(name="Torso", pos=[0, 0, self.torso_position], size=[self.torso_depth, self.torso_width, self.torso_height])
+        pyrosim.Send_Cube(name="Torso", pos=[self.start_position, 0, self.torso_position], size=[self.torso_depth, self.torso_width, self.torso_height])
 
         # __________Create Connections to Torso__________
         pyrosim.Send_Cube(name="Head", pos=[0, 0, self.head_size/2], size=[self.head_size, self.head_size, self.head_size])
-        pyrosim.Send_Joint(name="Torso_Head", parent="Torso", child="Head", type="revolute", position=[0, 0, self.torso_position+(self.torso_height/2)], jointAxis="0 1 0")
+        pyrosim.Send_Joint(name="Torso_Head", parent="Torso", child="Head", type="revolute", position=[self.start_position, 0, self.torso_position+(self.torso_height/2)], jointAxis="0 1 0")
 
         pyrosim.Send_Cube(name="LeftShoulder", pos=[0, -self.shoulder_size/2, 0], size=[self.shoulder_size, self.shoulder_size, self.shoulder_size])
-        pyrosim.Send_Joint(name="Torso_LeftShoulder", parent="Torso", child="LeftShoulder", type="revolute", position=[0, -self.torso_width/2, self.torso_position + (self.torso_height / 2) - (self.shoulder_size/2)], jointAxis="1 0 0")
+        pyrosim.Send_Joint(name="Torso_LeftShoulder", parent="Torso", child="LeftShoulder", type="revolute", position=[self.start_position, -self.torso_width/2, self.torso_position + (self.torso_height / 2) - (self.shoulder_size/2)], jointAxis="1 0 0")
 
         pyrosim.Send_Cube(name="RightShoulder", pos=[0, self.shoulder_size / 2, 0], size=[self.shoulder_size, self.shoulder_size, self.shoulder_size])
-        pyrosim.Send_Joint(name="Torso_RightShoulder", parent="Torso", child="RightShoulder", type="revolute", position=[0, self.torso_width / 2, self.torso_position + (self.torso_height / 2) - (self.shoulder_size / 2)], jointAxis="1 0 0")
+        pyrosim.Send_Joint(name="Torso_RightShoulder", parent="Torso", child="RightShoulder", type="revolute", position=[self.start_position, self.torso_width / 2, self.torso_position + (self.torso_height / 2) - (self.shoulder_size / 2)], jointAxis="1 0 0")
 
         pyrosim.Send_Cube(name="Pelvis", pos=[0, 0, -self.pelvis_size / 2], size=[self.pelvis_size, self.pelvis_width, self.pelvis_size])
-        pyrosim.Send_Joint(name="Torso_Pelvis", parent="Torso", child="Pelvis", type="revolute", position=[0, 0, self.torso_position - (self.torso_height / 2)], jointAxis="0 0 1")
+        pyrosim.Send_Joint(name="Torso_Pelvis", parent="Torso", child="Pelvis", type="revolute", position=[self.start_position, 0, self.torso_position - (self.torso_height / 2)], jointAxis="0 0 1")
 
         # __________Create Lower Body__________
         pyrosim.Send_Cube(name="LeftHip", pos=[0, -self.hip_size / 2, 0], size=[self.hip_size, self.hip_size, self.hip_size])
@@ -166,6 +168,14 @@ class SOLUTION:
         pyrosim.Send_Motor_Neuron(name=10, jointName="RightHip_RightQuad")
         pyrosim.Send_Motor_Neuron(name=11, jointName="Pelvis_LeftHip")
         pyrosim.Send_Motor_Neuron(name=12, jointName="Pelvis_RightHip")
+        pyrosim.Send_Motor_Neuron(name=13, jointName="Torso_Pelvis")
+        pyrosim.Send_Motor_Neuron(name=14, jointName="Torso_Head")
+        pyrosim.Send_Motor_Neuron(name=15, jointName="Torso_LeftShoulder")
+        pyrosim.Send_Motor_Neuron(name=16, jointName="Torso_RightShoulder")
+        pyrosim.Send_Motor_Neuron(name=17, jointName="LeftShoulder_LeftBicep")
+        pyrosim.Send_Motor_Neuron(name=18, jointName="RightShoulder_RightBicep")
+        pyrosim.Send_Motor_Neuron(name=19, jointName="LeftBicep_LeftForearm")
+        pyrosim.Send_Motor_Neuron(name=20, jointName="RightBicep_RightForearm")
 
         # __________Create Synapses__________
         for currentRow in range(0, c.numSensorNeurons):

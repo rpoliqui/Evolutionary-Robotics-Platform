@@ -5,20 +5,20 @@ loop_iterations = 1000
 loop_delay = 1/1000.
 
 #==================== Robot Constants ====================
-max_joint_force = 50
+max_joint_force = 75
 
 numSensorNeurons = 5
-numMotorNeurons = 8
+numMotorNeurons = 16
 
 amplitude = -numpy.pi/4
 frequency = 8.8
 phaseOffset = 0
 
-motorJointRange = 0.2
+motorJointRange = 0.75
 
 #==================== Environment Constants ====================
-gravity = 9.8
+gravity = 9.81
 
 #==================== Evolution Constants ====================
-numberOfGenerations = 10
+numberOfGenerations = 5
 populationSize = 10
