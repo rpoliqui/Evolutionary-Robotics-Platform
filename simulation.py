@@ -3,6 +3,7 @@ import pybullet as p
 import pybullet_data
 import constants as c
 import time
+import os
 from world import WORLD
 from robot import ROBOT
 
@@ -10,8 +11,8 @@ class SIMULATION:
 
     def __init__(self, directOrGUI, solutionID):
         self.debug_mode = True
-        self.world_file = "world.sdf"
-        self.robot_file = "body.urdf"
+        self.world_file = f"world{solutionID}.sdf"
+        self.robot_file = f"body{solutionID}.urdf"
 
         # Connect to GUI
         self.directOrGUI = directOrGUI
@@ -28,14 +29,17 @@ class SIMULATION:
             p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
         print("===========================================================\n")
 
-        # Define gravity force
-        p.setGravity(0,0,-c.gravity)
-
         # Create World
         self.world = WORLD(self.world_file)
 
+        # Define gravity force
+        p.setGravity(0,0,-c.gravity)
+
         # Create Robot
         self.robot = ROBOT(self.robot_file, solutionID)
+
+        os.system(f"del {self.robot_file}")
+        os.system(f"del {self.world_file}")
 
     def Run(self):
         #__________Simulation Loop__________
@@ -49,7 +53,6 @@ class SIMULATION:
             self.robot.Think()
 
             self.robot.Act(t)
-
 
             #print(t)
 

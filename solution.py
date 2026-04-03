@@ -43,18 +43,18 @@ class SOLUTION:
 
     def Create_World(self):
         # __________Name of file to store world information__________
-        pyrosim.Start_SDF("world.sdf")
+        pyrosim.Start_SDF(f"world{self.myID}.sdf")
 
         # __________Close the World File__________
         pyrosim.End()
 
         # __________Make Sure File Exists__________
-        while not os.path.exists("world.sdf"):
+        while not os.path.exists(f"world{self.myID}.sdf"):
             time.sleep(0.01)
 
     def Create_Body(self):
         # __________Name of file to store robot information__________
-        pyrosim.Start_URDF("body.urdf")
+        pyrosim.Start_URDF(f"body{self.myID}.urdf")
 
         # __________Create the Root (Torso)__________
         pyrosim.Send_Cube(name="Torso", pos=[0, 0, 1], size=[length, width, height])
@@ -88,7 +88,7 @@ class SOLUTION:
         pyrosim.End()
 
         # __________Make Sure File Exists__________
-        while not os.path.exists("body.urdf"):
+        while not os.path.exists(f"body{self.myID}.urdf"):
             time.sleep(0.01)
 
     def Create_Brain(self):
