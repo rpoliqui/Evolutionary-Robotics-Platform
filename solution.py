@@ -190,9 +190,23 @@ class SOLUTION:
             time.sleep(0.01)
 
     def Mutate(self):
-        randomRow = random.randint(0, c.numSensorNeurons-1)
-        randomColumn = random.randint(0, c.numMotorNeurons-1)
-        self.weights[randomRow, randomColumn] = random.random() * 2 - 1
+        num_mutations = random.randint(1, 5)
+
+        for mutation in range(0, num_mutations):
+            mutation_strategy = random.choice(["OVERWRITE", "MODIFY"])
+
+            # Completely replace one neuron weight
+            if mutation_strategy == "OVERWRITE":
+                randomRow = random.randint(0, c.numSensorNeurons-1)
+                randomColumn = random.randint(0, c.numMotorNeurons-1)
+                self.weights[randomRow, randomColumn] = random.random() * 2 - 1
+
+            # Slightly modify one existing neuron weight
+            elif mutation_strategy == "MODIFY":
+                randomRow = random.randint(0, c.numSensorNeurons - 1)
+                randomColumn = random.randint(0, c.numMotorNeurons - 1)
+                originalValue = self.weights[randomRow, randomColumn]
+                self.weights[randomRow, randomColumn] = originalValue + (random.random() * 2 * 0.25 - 0.25)
 
     def Set_ID(self, ID):
         self.myID = ID

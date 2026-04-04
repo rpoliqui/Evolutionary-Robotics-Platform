@@ -1,12 +1,17 @@
+from matplotlib import pyplot as plt
 from solution import SOLUTION
 import constants as c
 import copy
+import pandas as pd
 
 class PARALLEL_HILL_CLIMBER:
 
     def __init__(self):
         self.nextAvailableID = 0
         self.parents = {}
+        self.fitness_data_filename = "fitness_data.csv"
+        self.fitness_data_file = open( self.fitness_data_filename, 'w')
+        self.fitness_data_file.writelines("Generation,Max Fitness,Average Fitness\n")
         for parent in range(c.populationSize):
             self.parents[parent] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1
@@ -26,13 +31,34 @@ class PARALLEL_HILL_CLIMBER:
                 best_solution = parent
         best_solution.Start_Simulation("GUI")
         best_solution.Wait_For_Simulation_To_End()
+        best_solution.Create_Brain()
+        best_solution.Create_Body()
+        best_solution.Create_World()
+
+    def Save_Data(self, currentGeneration):
+        max_fitness = float("-inf")
+        running_total = 0
+        for parent in self.parents.values():
+            running_total += parent.fitness
+            if parent.fitness > max_fitness:
+                max_fitness = parent.fitness
+        self.fitness_data_file.writelines(f"{currentGeneration},{max_fitness},{running_total/c.populationSize}\n")
+
+    def Plot_Data(self):
+        self.fitness_data_file.close()
+        df = pd.read_csv(self.fitness_data_filename)
+        df.plot(x="Generation", y="Max Fitness")
+        plt.savefig("Max Fitness")
+        df.plot(x="Generation", y="Average Fitness")
+        plt.savefig("Average Fitness")
 
     def Evolve_For_One_Generation(self, currentGeneration):
         self.Spawn()
         self.Mutate()
         self.Evaluate(self.children)
+        self.Save_Data(currentGeneration)
         self.Print()
-        print(f"Generation {currentGeneration} of {c.numberOfGenerations}")
+        print(f"Generation {currentGeneration+1} of {c.numberOfGenerations}")
         self.Select()
 
     def Spawn(self):
