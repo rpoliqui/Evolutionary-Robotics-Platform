@@ -43,7 +43,7 @@ class ROBOT:
             self.sensors[sensor].Get_Value(t)
 
     def Think(self):
-        self.nn.Update()
+        self.nn.Update(self.robotId)
 
     def Act(self, t):
         for neuronName in self.nn.Get_Neuron_Names():

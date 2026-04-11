@@ -20,8 +20,27 @@ class NEURON:
 
         self.Set_Value(0.0)
 
-    def Update_Sensor_Neuron(self):
-        self.Set_Value(pyrosim.Get_Touch_Sensor_Value_For_Link(self.Get_Link_Name()))
+    def Update_Sensor_Neuron(self, robot):
+        if self.type == c.TOUCH_SENSOR_NEURON:
+            self.Set_Value(pyrosim.Get_Touch_Sensor_Value_For_Link(self.Get_Link_Name()))
+
+        elif self.type == c.ORIENTATION_ROLL_SENSOR_NEURON:
+            quaternion_orientation = pybullet.getBasePositionAndOrientation(robot)[1]
+            # [roll, pitch, yaw]
+            orientation = pybullet.getEulerFromQuaternion(quaternion_orientation)
+            self.Set_Value(orientation[0])
+
+        elif self.type == c.ORIENTATION_PITCH_SENSOR_NEURON:
+            quaternion_orientation = pybullet.getBasePositionAndOrientation(robot)[1]
+            # [roll, pitch, yaw]
+            orientation = pybullet.getEulerFromQuaternion(quaternion_orientation)
+            self.Set_Value(orientation[1])
+
+        elif self.type == c.ORIENTATION_YAW_SENSOR_NEURON:
+            quaternion_orientation = pybullet.getBasePositionAndOrientation(robot)[1]
+            # [roll, pitch, yaw]
+            orientation = pybullet.getEulerFromQuaternion(quaternion_orientation)
+            self.Set_Value(orientation[2])
 
     def Update_Hidden_Or_Motor_Neuron(self, neurons, synapses):
         self.Set_Value(0.0)
@@ -57,7 +76,7 @@ class NEURON:
 
     def Is_Sensor_Neuron(self):
 
-        return self.type == c.SENSOR_NEURON
+        return self.type == c.TOUCH_SENSOR_NEURON or self.type == c.ORIENTATION_PITCH_SENSOR_NEURON or self.type == c.ORIENTATION_ROLL_SENSOR_NEURON or self.type == c.ORIENTATION_YAW_SENSOR_NEURON
 
     def Is_Hidden_Neuron(self):
 
@@ -95,7 +114,20 @@ class NEURON:
 
         if "sensor" in line:
 
-            self.type = c.SENSOR_NEURON
+            if "touch" in line:
+
+                self.type = c.TOUCH_SENSOR_NEURON
+
+            elif "orientation" in line:
+
+                if "roll" in line:
+                    self.type = c.ORIENTATION_ROLL_SENSOR_NEURON
+
+                elif "pitch" in line:
+                    self.type = c.ORIENTATION_PITCH_SENSOR_NEURON
+
+                elif "yaw" in line:
+                    self.type = c.ORIENTATION_YAW_SENSOR_NEURON
 
         elif "motor" in line:
 

@@ -144,9 +144,8 @@ def Send_Motor_Neuron(name,jointName):
 
     f.write('    <neuron name = "' + str(name) + '" type = "motor"  jointName = "' + jointName + '" />\n')
 
-def Send_Sensor_Neuron(name,linkName):
-
-    f.write('    <neuron name = "' + str(name) + '" type = "sensor" linkName = "' + linkName + '" />\n')
+def Send_Sensor_Neuron(name,linkName, type="touch_sensor"):
+    f.write('    <neuron name = "' + str(name) + '" type = "' + str(type) + '" linkName = "' + linkName + '" />\n')
 
 def Send_Sphere(name="default",pos=[0,0,0],radius=1):
 
