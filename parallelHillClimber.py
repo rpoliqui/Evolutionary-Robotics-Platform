@@ -6,14 +6,14 @@ import pandas as pd
 
 class PARALLEL_HILL_CLIMBER:
 
-    def __init__(self):
+    def __init__(self, version):
         self.nextAvailableID = 0
         self.parents = {}
-        self.fitness_data_filename = "fitness_data.csv"
+        self.fitness_data_filename = f"fitness_data_{version}.csv"
         self.fitness_data_file = open( self.fitness_data_filename, 'w')
         self.fitness_data_file.writelines("Generation,Max Fitness,Average Fitness\n")
         for parent in range(c.populationSize):
-            self.parents[parent] = SOLUTION(self.nextAvailableID)
+            self.parents[parent] = SOLUTION(self.nextAvailableID, version)
             self.nextAvailableID += 1
 
     def Evolve(self):

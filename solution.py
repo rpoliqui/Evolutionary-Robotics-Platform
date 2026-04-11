@@ -7,10 +7,12 @@ from pyrosim import pyrosim
 
 class SOLUTION:
 
-    def __init__(self, ID):
+    def __init__(self, ID, version):
         self.weights = numpy.random.rand(c.numSensorNeurons, c.numMotorNeurons)
         self.weights = self.weights * 2 - 1
         self.myID = ID
+
+        self.version = version
 
         self.start_position = -5
 
@@ -48,6 +50,27 @@ class SOLUTION:
 
         self.torso_position = self.foot_height + self.shin_length + self.quad_length + self.pelvis_size + (self.torso_height/2)
 
+        self.body_parameters = [self.torso_width,
+                                self.torso_height,
+                                self.torso_depth,
+                                self.head_size,
+                                self.shoulder_size,
+                                self.bicep_size,
+                                self.bicep_length,
+                                self.forearm_size,
+                                self.forearm_length,
+                                self.pelvis_size,
+                                self.pelvis_width,
+                                self.hip_size,
+                                self.quad_size,
+                                self.quad_length,
+                                self.shin_size,
+                                self.shin_length,
+                                self.foot_width,
+                                self.foot_length,
+                                self.foot_height,
+                                self.hand_size]
+
 
     def Start_Simulation(self, directOrGui):
         self.Create_World()
@@ -62,6 +85,7 @@ class SOLUTION:
         while not os.path.exists(fitnessFileName):
             time.sleep(0.01)
 
+        time.sleep(0.01)
         fitnessFile = open(fitnessFileName)
         self.fitness = float(fitnessFile.read())
         fitnessFile.close()
@@ -84,64 +108,64 @@ class SOLUTION:
         pyrosim.Start_URDF(f"body{self.myID}.urdf")
 
         # __________Create the Root (Torso)__________
-        pyrosim.Send_Cube(name="Torso", pos=[self.start_position, 0, self.torso_position], size=[self.torso_depth, self.torso_width, self.torso_height])
+        pyrosim.Send_Cube(name="Torso", pos=[self.start_position, 0, self.torso_position], size=[self.body_parameters[2], self.body_parameters[0], self.body_parameters[1]])
 
         # __________Create Connections to Torso__________
-        pyrosim.Send_Cube(name="Head", pos=[0, 0, self.head_size/2], size=[self.head_size, self.head_size, self.head_size])
-        pyrosim.Send_Joint(name="Torso_Head", parent="Torso", child="Head", type="revolute", position=[self.start_position, 0, self.torso_position+(self.torso_height/2)], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="Head", pos=[0, 0, self.body_parameters[3]/2], size=[self.body_parameters[3], self.body_parameters[3], self.body_parameters[3]])
+        pyrosim.Send_Joint(name="Torso_Head", parent="Torso", child="Head", type="revolute", position=[self.start_position, 0, self.torso_position+(self.body_parameters[1]/2)], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="LeftShoulder", pos=[0, -self.shoulder_size/2, 0], size=[self.shoulder_size, self.shoulder_size, self.shoulder_size])
-        pyrosim.Send_Joint(name="Torso_LeftShoulder", parent="Torso", child="LeftShoulder", type="revolute", position=[self.start_position, -self.torso_width/2, self.torso_position + (self.torso_height / 2) - (self.shoulder_size/2)], jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="LeftShoulder", pos=[0, -self.body_parameters[4]/2, 0], size=[self.body_parameters[4], self.body_parameters[4], self.body_parameters[4]])
+        pyrosim.Send_Joint(name="Torso_LeftShoulder", parent="Torso", child="LeftShoulder", type="revolute", position=[self.start_position, -self.body_parameters[0]/2, self.torso_position + (self.body_parameters[1] / 2) - (self.body_parameters[4]/2)], jointAxis="1 0 0")
 
-        pyrosim.Send_Cube(name="RightShoulder", pos=[0, self.shoulder_size / 2, 0], size=[self.shoulder_size, self.shoulder_size, self.shoulder_size])
-        pyrosim.Send_Joint(name="Torso_RightShoulder", parent="Torso", child="RightShoulder", type="revolute", position=[self.start_position, self.torso_width / 2, self.torso_position + (self.torso_height / 2) - (self.shoulder_size / 2)], jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="RightShoulder", pos=[0, self.body_parameters[4] / 2, 0], size=[self.body_parameters[4], self.body_parameters[4], self.body_parameters[4]])
+        pyrosim.Send_Joint(name="Torso_RightShoulder", parent="Torso", child="RightShoulder", type="revolute", position=[self.start_position, self.body_parameters[0] / 2, self.torso_position + (self.body_parameters[1] / 2) - (self.body_parameters[4] / 2)], jointAxis="1 0 0")
 
-        pyrosim.Send_Cube(name="Pelvis", pos=[0, 0, -self.pelvis_size / 2], size=[self.pelvis_size, self.pelvis_width, self.pelvis_size])
-        pyrosim.Send_Joint(name="Torso_Pelvis", parent="Torso", child="Pelvis", type="revolute", position=[self.start_position, 0, self.torso_position - (self.torso_height / 2)], jointAxis="0 0 1")
+        pyrosim.Send_Cube(name="Pelvis", pos=[0, 0, -self.body_parameters[9] / 2], size=[self.body_parameters[9], self.body_parameters[10], self.body_parameters[9]])
+        pyrosim.Send_Joint(name="Torso_Pelvis", parent="Torso", child="Pelvis", type="revolute", position=[self.start_position, 0, self.torso_position - (self.body_parameters[1] / 2)], jointAxis="0 0 1")
 
         # __________Create Lower Body__________
-        pyrosim.Send_Cube(name="LeftHip", pos=[0, -self.hip_size / 2, 0], size=[self.hip_size, self.hip_size, self.hip_size])
-        pyrosim.Send_Joint(name="Pelvis_LeftHip", parent="Pelvis", child="LeftHip", type="revolute", position=[0, -self.pelvis_width/2, -self.pelvis_size/2], jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="LeftHip", pos=[0, -self.body_parameters[11] / 2, 0], size=[self.body_parameters[11], self.body_parameters[11], self.body_parameters[11]])
+        pyrosim.Send_Joint(name="Pelvis_LeftHip", parent="Pelvis", child="LeftHip", type="revolute", position=[0, -self.body_parameters[10]/2, -self.body_parameters[9]/2], jointAxis="1 0 0")
 
-        pyrosim.Send_Cube(name="RightHip", pos=[0, self.hip_size / 2, 0], size=[self.hip_size, self.hip_size, self.hip_size])
-        pyrosim.Send_Joint(name="Pelvis_RightHip", parent="Pelvis", child="RightHip", type="revolute", position=[0, self.pelvis_width/2, -self.pelvis_size/2], jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="RightHip", pos=[0, self.body_parameters[11] / 2, 0], size=[self.body_parameters[11], self.body_parameters[11], self.body_parameters[11]])
+        pyrosim.Send_Joint(name="Pelvis_RightHip", parent="Pelvis", child="RightHip", type="revolute", position=[0, self.body_parameters[10]/2, -self.body_parameters[9]/2], jointAxis="1 0 0")
 
-        pyrosim.Send_Cube(name="LeftQuad", pos=[0, 0, -self.quad_length/2], size=[self.quad_size, self.quad_size, self.quad_length])
-        pyrosim.Send_Joint(name="LeftHip_LeftQuad", parent="LeftHip", child="LeftQuad", type="revolute", position=[0, -self.hip_size/2, -self.hip_size/2], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="LeftQuad", pos=[0, 0, -self.body_parameters[13]/2], size=[self.body_parameters[12], self.body_parameters[12], self.body_parameters[13]])
+        pyrosim.Send_Joint(name="LeftHip_LeftQuad", parent="LeftHip", child="LeftQuad", type="revolute", position=[0, -self.body_parameters[11]/2, -self.body_parameters[11]/2], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightQuad", pos=[0, 0, -self.quad_length/2], size=[self.quad_size, self.quad_size, self.quad_length])
-        pyrosim.Send_Joint(name="RightHip_RightQuad", parent="RightHip", child="RightQuad", type="revolute", position=[0, self.hip_size/2, -self.hip_size/2], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="RightQuad", pos=[0, 0, -self.body_parameters[13]/2], size=[self.body_parameters[12], self.body_parameters[12], self.body_parameters[13]])
+        pyrosim.Send_Joint(name="RightHip_RightQuad", parent="RightHip", child="RightQuad", type="revolute", position=[0, self.body_parameters[11]/2, -self.body_parameters[11]/2], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="LeftShin", pos=[0, 0, -self.shin_length/2], size=[self.shin_size, self.shin_size, self.shin_length])
-        pyrosim.Send_Joint(name="LeftQuad_LeftShin", parent="LeftQuad", child="LeftShin", type="revolute", position=[0, 0, -self.quad_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="LeftShin", pos=[0, 0, -self.body_parameters[15]/2], size=[self.body_parameters[14], self.body_parameters[14], self.body_parameters[15]])
+        pyrosim.Send_Joint(name="LeftQuad_LeftShin", parent="LeftQuad", child="LeftShin", type="revolute", position=[0, 0, -self.body_parameters[13]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightShin", pos=[0, 0, -self.shin_length/2], size=[self.shin_size, self.shin_size, self.shin_length])
-        pyrosim.Send_Joint(name="RightQuad_RightShin", parent="RightQuad", child="RightShin", type="revolute", position=[0, 0, -self.quad_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="RightShin", pos=[0, 0, -self.body_parameters[15]/2], size=[self.body_parameters[14], self.body_parameters[14], self.body_parameters[15]])
+        pyrosim.Send_Joint(name="RightQuad_RightShin", parent="RightQuad", child="RightShin", type="revolute", position=[0, 0, -self.body_parameters[13]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="LeftFoot", pos=[self.foot_length/4, 0, -self.foot_height/2], size=[self.foot_length, self.foot_width, self.foot_height])
-        pyrosim.Send_Joint(name="LeftShin_LeftFoot", parent="LeftShin", child="LeftFoot", type="revolute", position=[0, 0, -self.shin_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="LeftFoot", pos=[self.body_parameters[17]/4, 0, -self.body_parameters[18]/2], size=[self.body_parameters[17], self.body_parameters[16], self.body_parameters[18]])
+        pyrosim.Send_Joint(name="LeftShin_LeftFoot", parent="LeftShin", child="LeftFoot", type="revolute", position=[0, 0, -self.body_parameters[15]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightFoot", pos=[self.foot_length/4, 0, -self.foot_height/2], size=[self.foot_length, self.foot_width, self.foot_height])
-        pyrosim.Send_Joint(name="RightShin_RightFoot", parent="RightShin", child="RightFoot", type="revolute", position=[0, 0, -self.shin_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="RightFoot", pos=[self.body_parameters[17]/4, 0, -self.body_parameters[18]/2], size=[self.body_parameters[17], self.body_parameters[16], self.body_parameters[18]])
+        pyrosim.Send_Joint(name="RightShin_RightFoot", parent="RightShin", child="RightFoot", type="revolute", position=[0, 0, -self.body_parameters[15]], jointAxis="0 1 0")
 
         # __________Create Upper Body__________
-        pyrosim.Send_Cube(name="LeftBicep", pos=[0, 0, -self.bicep_length/2], size=[self.bicep_size, self.bicep_size, self.bicep_length])
-        pyrosim.Send_Joint(name="LeftShoulder_LeftBicep", parent="LeftShoulder", child="LeftBicep", type="revolute", position=[0, -self.shoulder_size/2, -self.shoulder_size/2], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="LeftBicep", pos=[0, 0, -self.body_parameters[6]/2], size=[self.body_parameters[5], self.body_parameters[5], self.body_parameters[6]])
+        pyrosim.Send_Joint(name="LeftShoulder_LeftBicep", parent="LeftShoulder", child="LeftBicep", type="revolute", position=[0, -self.body_parameters[4]/2, -self.body_parameters[4]/2], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightBicep", pos=[0, 0, -self.bicep_length/2], size=[self.bicep_size, self.bicep_size, self.bicep_length])
-        pyrosim.Send_Joint(name="RightShoulder_RightBicep", parent="RightShoulder", child="RightBicep", type="revolute", position=[0, self.shoulder_size/2, -self.shoulder_size/2], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="RightBicep", pos=[0, 0, -self.body_parameters[6]/2], size=[self.body_parameters[5], self.body_parameters[5], self.body_parameters[6]])
+        pyrosim.Send_Joint(name="RightShoulder_RightBicep", parent="RightShoulder", child="RightBicep", type="revolute", position=[0, self.body_parameters[4]/2, -self.body_parameters[4]/2], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="LeftForearm", pos=[0, 0, -self.forearm_length/2], size=[self.forearm_size, self.forearm_size, self.forearm_length])
-        pyrosim.Send_Joint(name="LeftBicep_LeftForearm", parent="LeftBicep", child="LeftForearm", type="revolute", position=[0, 0, -self.bicep_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="LeftForearm", pos=[0, 0, -self.body_parameters[8]/2], size=[self.body_parameters[7], self.body_parameters[7], self.body_parameters[8]])
+        pyrosim.Send_Joint(name="LeftBicep_LeftForearm", parent="LeftBicep", child="LeftForearm", type="revolute", position=[0, 0, -self.body_parameters[6]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightForearm", pos=[0, 0, -self.forearm_length/2], size=[self.forearm_size, self.forearm_size, self.forearm_length])
-        pyrosim.Send_Joint(name="RightBicep_RightForearm", parent="RightBicep", child="RightForearm", type="revolute", position=[0, 0, -self.bicep_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="RightForearm", pos=[0, 0, -self.body_parameters[8]/2], size=[self.body_parameters[7], self.body_parameters[7], self.body_parameters[8]])
+        pyrosim.Send_Joint(name="RightBicep_RightForearm", parent="RightBicep", child="RightForearm", type="revolute", position=[0, 0, -self.body_parameters[6]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="LeftHand", pos=[0, 0, -self.hand_size/2], size=[self.hand_size, self.hand_size, self.hand_size])
-        pyrosim.Send_Joint(name="LeftForearm_LeftHand", parent="LeftForearm", child="LeftHand", type="fixed", position=[0, 0, -self.forearm_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="LeftHand", pos=[0, 0, -self.body_parameters[19]/2], size=[self.body_parameters[19], self.body_parameters[19], self.body_parameters[19]])
+        pyrosim.Send_Joint(name="LeftForearm_LeftHand", parent="LeftForearm", child="LeftHand", type="fixed", position=[0, 0, -self.body_parameters[8]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightHand", pos=[0, 0, -self.hand_size/2], size=[self.hand_size, self.hand_size, self.hand_size])
-        pyrosim.Send_Joint(name="RightForearm_RightHand", parent="RightForearm", child="RightHand", type="fixed", position=[0, 0, -self.forearm_length], jointAxis="0 1 0")
+        pyrosim.Send_Cube(name="RightHand", pos=[0, 0, -self.body_parameters[19]/2], size=[self.body_parameters[19], self.body_parameters[19], self.body_parameters[19]])
+        pyrosim.Send_Joint(name="RightForearm_RightHand", parent="RightForearm", child="RightHand", type="fixed", position=[0, 0, -self.body_parameters[8]], jointAxis="0 1 0")
 
         # __________Close the Robot File__________
         pyrosim.End()
@@ -193,23 +217,25 @@ class SOLUTION:
             time.sleep(0.01)
 
     def Mutate(self):
-        num_mutations = random.randint(1, 5)
+        num_mutations = random.randint(1, 10)
 
         for mutation in range(0, num_mutations):
-            mutation_strategy = random.choice(["OVERWRITE", "MODIFY"])
+            if self.version == 'A':
+                mutation_strategy = random.choice(["BRAIN"])
+            elif self.version == 'B':
+                mutation_strategy = random.choice(["BRAIN", "BRAIN", "BRAIN", "BRAIN", "BODY"])
 
             # Completely replace one neuron weight
-            if mutation_strategy == "OVERWRITE":
+            if mutation_strategy == "BRAIN":
                 randomRow = random.randint(0, c.numSensorNeurons-1)
                 randomColumn = random.randint(0, c.numMotorNeurons-1)
                 self.weights[randomRow, randomColumn] = random.random() * 2 - 1
 
-            # Slightly modify one existing neuron weight
-            elif mutation_strategy == "MODIFY":
-                randomRow = random.randint(0, c.numSensorNeurons - 1)
-                randomColumn = random.randint(0, c.numMotorNeurons - 1)
-                originalValue = self.weights[randomRow, randomColumn]
-                self.weights[randomRow, randomColumn] = originalValue + (random.random() * 2 * 0.25 - 0.25)
+            elif mutation_strategy == "BODY":
+                randomIndex = random.randint(0, c.numBodyParams-1)
+                self.body_parameters[randomIndex] += random.random() * 2 * 0.1 - 0.1
+                if self.body_parameters[randomIndex] <= 0:
+                    self.body_parameters[randomIndex] = 0.001
 
     def Set_ID(self, ID):
         self.myID = ID

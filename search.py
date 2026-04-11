@@ -5,7 +5,7 @@ os.system("del brain*.nndf")
 
 os.system("del fitness*.nndf")
 
-phc = PARALLEL_HILL_CLIMBER()
+phc = PARALLEL_HILL_CLIMBER('A')
 
 phc.Evolve()
 

@@ -9,6 +9,7 @@ max_joint_force = 75
 
 numSensorNeurons = 8
 numMotorNeurons = 16
+numBodyParams = 20
 
 amplitude = -numpy.pi/4
 frequency = 8.8
@@ -21,4 +22,4 @@ gravity = 9.81
 
 #==================== Evolution Constants ====================
 numberOfGenerations = 10
-populationSize = 10
+populationSize = 15

@@ -57,5 +57,5 @@ class ROBOT:
         basePosition = basePositionAndOrientation[0]
         xPosition = basePosition[0]
         with open(f"tmp{self.solutionID}.txt", "w") as f:
-            f.write(str(xPosition))
+            f.write(str(xPosition+5))
         os.system(f"rename tmp{self.solutionID}.txt fitness{self.solutionID}.txt")
