@@ -29,18 +29,21 @@ class NEURON:
             # [roll, pitch, yaw]
             orientation = pybullet.getEulerFromQuaternion(quaternion_orientation)
             self.Set_Value(orientation[0])
+            #print(f"ROLL: {self.value}")
 
         elif self.type == c.ORIENTATION_PITCH_SENSOR_NEURON:
             quaternion_orientation = pybullet.getBasePositionAndOrientation(robot)[1]
             # [roll, pitch, yaw]
             orientation = pybullet.getEulerFromQuaternion(quaternion_orientation)
             self.Set_Value(orientation[1])
+            #print(f"PITCH: {self.value}")
 
         elif self.type == c.ORIENTATION_YAW_SENSOR_NEURON:
             quaternion_orientation = pybullet.getBasePositionAndOrientation(robot)[1]
             # [roll, pitch, yaw]
             orientation = pybullet.getEulerFromQuaternion(quaternion_orientation)
             self.Set_Value(orientation[2])
+            #print(f"YAW: {self.value}")
 
     def Update_Hidden_Or_Motor_Neuron(self, neurons, synapses):
         self.Set_Value(0.0)

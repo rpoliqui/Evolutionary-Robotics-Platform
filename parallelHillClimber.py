@@ -1,3 +1,5 @@
+import time
+
 from matplotlib import pyplot as plt
 from solution import SOLUTION
 import constants as c
@@ -11,12 +13,14 @@ class PARALLEL_HILL_CLIMBER:
         self.parents = {}
         self.fitness_data_filename = f"fitness_data_{version}.csv"
         self.fitness_data_file = open( self.fitness_data_filename, 'w')
-        self.fitness_data_file.writelines("Generation,Max Fitness,Average Fitness\n")
+        self.fitness_data_file.writelines(f"Generation,Max Fitness {version},Average Fitness {version}\n")
+        self.version = version
         for parent in range(c.populationSize):
             self.parents[parent] = SOLUTION(self.nextAvailableID, version)
             self.nextAvailableID += 1
 
     def Evolve(self):
+        self.startTime = time.time()
         self.Evaluate(self.parents)
 
         for currentGeneration in range(c.numberOfGenerations):
@@ -47,18 +51,22 @@ class PARALLEL_HILL_CLIMBER:
     def Plot_Data(self):
         self.fitness_data_file.close()
         df = pd.read_csv(self.fitness_data_filename)
-        df.plot(x="Generation", y="Max Fitness")
-        plt.savefig("Max Fitness")
-        df.plot(x="Generation", y="Average Fitness")
-        plt.savefig("Average Fitness")
+        df.plot(x="Generation", y=f"Max Fitness {self.version}")
+        plt.savefig(f"Max Fitness {self.version}")
+        df.plot(x="Generation", y=f"Average Fitness {self.version}")
+        plt.savefig(f"Average Fitness {self.version}")
 
     def Evolve_For_One_Generation(self, currentGeneration):
+        startTime = time.time()
         self.Spawn()
         self.Mutate()
         self.Evaluate(self.children)
         self.Save_Data(currentGeneration)
         self.Print()
+        endTime = time.time()
         print(f"Generation {currentGeneration+1} of {c.numberOfGenerations}")
+        print(f"Generation Time: {endTime-startTime} seconds")
+        print(f"Total Time: {(endTime - self.startTime)/60} minutes ")
         self.Select()
 
     def Spawn(self):

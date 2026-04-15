@@ -199,10 +199,10 @@ class SOLUTION:
         pyrosim.Send_Motor_Neuron(name=17, jointName="Torso_Head")
         pyrosim.Send_Motor_Neuron(name=18, jointName="Torso_LeftShoulder")
         pyrosim.Send_Motor_Neuron(name=19, jointName="Torso_RightShoulder")
-        pyrosim.Send_Motor_Neuron(name=19, jointName="LeftShoulder_LeftBicep")
-        pyrosim.Send_Motor_Neuron(name=20, jointName="RightShoulder_RightBicep")
-        pyrosim.Send_Motor_Neuron(name=21, jointName="LeftBicep_LeftForearm")
-        pyrosim.Send_Motor_Neuron(name=22, jointName="RightBicep_RightForearm")
+        pyrosim.Send_Motor_Neuron(name=20, jointName="LeftShoulder_LeftBicep")
+        pyrosim.Send_Motor_Neuron(name=21, jointName="RightShoulder_RightBicep")
+        pyrosim.Send_Motor_Neuron(name=22, jointName="LeftBicep_LeftForearm")
+        pyrosim.Send_Motor_Neuron(name=23, jointName="RightBicep_RightForearm")
 
         # __________Create Synapses__________
         for currentRow in range(0, c.numSensorNeurons):
@@ -224,6 +224,8 @@ class SOLUTION:
                 mutation_strategy = random.choice(["BRAIN"])
             elif self.version == 'B':
                 mutation_strategy = random.choice(["BRAIN", "BRAIN", "BRAIN", "BRAIN", "BODY"])
+            else:
+                mutation_strategy = random.choice(["BRAIN", "BODY"])
 
             # Completely replace one neuron weight
             if mutation_strategy == "BRAIN":
