@@ -13,6 +13,7 @@ class SIMULATION:
         self.debug_mode = True
         self.world_file = f"world{solutionID}.sdf"
         self.robot_file = f"body{solutionID}.urdf"
+        self.solutionID = solutionID
 
         # Connect to GUI
         self.directOrGUI = directOrGUI
@@ -38,12 +39,15 @@ class SIMULATION:
         # Create Robot
         self.robot = ROBOT(self.robot_file, solutionID)
 
-        os.system(f"del {self.robot_file}")
-        os.system(f"del {self.world_file}")
+        if self.directOrGUI != 'GUI':
+            os.system(f"del {self.robot_file}")
+            os.system(f"del {self.world_file}")
+            os.system(f"del brain{solutionID}.nndf")
 
     def Run(self):
         #__________Simulation Loop__________
         #=================================================================================================================
+        print(f"Starting Simulation {self.solutionID}")
         for t in range(c.loop_iterations):
             # Step Simulation
             p.stepSimulation()
@@ -59,6 +63,7 @@ class SIMULATION:
             # Sleep
             if self.directOrGUI == 'GUI':
                 time.sleep(c.loop_delay)
+        print(f"Finished Simulation {self.solutionID}")
 
     def Get_Fitness(self):
         self.robot.Get_Fitness()

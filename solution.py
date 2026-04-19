@@ -42,8 +42,8 @@ class SOLUTION:
         self.shin_size = 0.25
         self.shin_length = 0.5
 
-        self.foot_width = 0.3
-        self.foot_length = 0.5
+        self.foot_width = 0.35
+        self.foot_length = 0.55
         self.foot_height = 0.1
 
         self.hand_size = 0.3
@@ -77,7 +77,7 @@ class SOLUTION:
         self.Create_Brain()
         self.Create_Body()
 
-        os.system("start /B python3 simulate.py " + directOrGui + " " + str(self.myID))
+        os.system(f"start /B python simulate.py {directOrGui} {self.myID} 2>nul")
 
     def Wait_For_Simulation_To_End(self):
         fitnessFileName = f"fitness{self.myID}.txt"
@@ -142,10 +142,10 @@ class SOLUTION:
         pyrosim.Send_Cube(name="RightShin", pos=[0, 0, -self.body_parameters[15]/2], size=[self.body_parameters[14], self.body_parameters[14], self.body_parameters[15]])
         pyrosim.Send_Joint(name="RightQuad_RightShin", parent="RightQuad", child="RightShin", type="revolute", position=[0, 0, -self.body_parameters[13]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="LeftFoot", pos=[self.body_parameters[17]/4, 0, -self.body_parameters[18]/2], size=[self.body_parameters[17], self.body_parameters[16], self.body_parameters[18]])
+        pyrosim.Send_Cube(name="LeftFoot", pos=[0, 0, -self.body_parameters[18]/2], size=[self.body_parameters[17], self.body_parameters[16], self.body_parameters[18]])
         pyrosim.Send_Joint(name="LeftShin_LeftFoot", parent="LeftShin", child="LeftFoot", type="revolute", position=[0, 0, -self.body_parameters[15]], jointAxis="0 1 0")
 
-        pyrosim.Send_Cube(name="RightFoot", pos=[self.body_parameters[17]/4, 0, -self.body_parameters[18]/2], size=[self.body_parameters[17], self.body_parameters[16], self.body_parameters[18]])
+        pyrosim.Send_Cube(name="RightFoot", pos=[0, 0, -self.body_parameters[18]/2], size=[self.body_parameters[17], self.body_parameters[16], self.body_parameters[18]])
         pyrosim.Send_Joint(name="RightShin_RightFoot", parent="RightShin", child="RightFoot", type="revolute", position=[0, 0, -self.body_parameters[15]], jointAxis="0 1 0")
 
         # __________Create Upper Body__________
@@ -179,30 +179,27 @@ class SOLUTION:
         pyrosim.Start_NeuralNetwork(f"brain{self.myID}.nndf")
 
         # __________Create Neurons__________
-        pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso", type="touch_sensor")
-        pyrosim.Send_Sensor_Neuron(name=1, linkName="LeftFoot", type="touch_sensor")
-        pyrosim.Send_Sensor_Neuron(name=2, linkName="RightFoot", type="touch_sensor")
-        pyrosim.Send_Sensor_Neuron(name=3, linkName="LeftHand", type="touch_sensor")
-        pyrosim.Send_Sensor_Neuron(name=4, linkName="RightHand", type="touch_sensor")
-        pyrosim.Send_Sensor_Neuron(name=5, linkName="Torso", type="orientation_pitch_sensor")
-        pyrosim.Send_Sensor_Neuron(name=6, linkName="Torso", type="orientation_roll_sensor")
-        pyrosim.Send_Sensor_Neuron(name=7, linkName="Torso", type="orientation_yaw_sensor")
-        pyrosim.Send_Motor_Neuron(name=8, jointName="LeftShin_LeftFoot")
-        pyrosim.Send_Motor_Neuron(name=9, jointName="RightShin_RightFoot")
-        pyrosim.Send_Motor_Neuron(name=10, jointName="LeftQuad_LeftShin")
-        pyrosim.Send_Motor_Neuron(name=11, jointName="RightQuad_RightShin")
-        pyrosim.Send_Motor_Neuron(name=12, jointName="LeftHip_LeftQuad")
-        pyrosim.Send_Motor_Neuron(name=13, jointName="RightHip_RightQuad")
-        pyrosim.Send_Motor_Neuron(name=14, jointName="Pelvis_LeftHip")
-        pyrosim.Send_Motor_Neuron(name=15, jointName="Pelvis_RightHip")
-        pyrosim.Send_Motor_Neuron(name=16, jointName="Torso_Pelvis")
-        pyrosim.Send_Motor_Neuron(name=17, jointName="Torso_Head")
-        pyrosim.Send_Motor_Neuron(name=18, jointName="Torso_LeftShoulder")
-        pyrosim.Send_Motor_Neuron(name=19, jointName="Torso_RightShoulder")
-        pyrosim.Send_Motor_Neuron(name=20, jointName="LeftShoulder_LeftBicep")
-        pyrosim.Send_Motor_Neuron(name=21, jointName="RightShoulder_RightBicep")
-        pyrosim.Send_Motor_Neuron(name=22, jointName="LeftBicep_LeftForearm")
-        pyrosim.Send_Motor_Neuron(name=23, jointName="RightBicep_RightForearm")
+        pyrosim.Send_Sensor_Neuron(name=0, linkName="LeftFoot", type="touch_sensor")
+        pyrosim.Send_Sensor_Neuron(name=1, linkName="RightFoot", type="touch_sensor")
+        pyrosim.Send_Sensor_Neuron(name=2, linkName="Torso", type="orientation_pitch_sensor")
+        pyrosim.Send_Sensor_Neuron(name=3, linkName="Torso", type="orientation_roll_sensor")
+        pyrosim.Send_Sensor_Neuron(name=4, linkName="Torso", type="orientation_yaw_sensor")
+        pyrosim.Send_Motor_Neuron(name=5, jointName="LeftShin_LeftFoot")
+        pyrosim.Send_Motor_Neuron(name=6, jointName="RightShin_RightFoot")
+        pyrosim.Send_Motor_Neuron(name=7, jointName="LeftQuad_LeftShin")
+        pyrosim.Send_Motor_Neuron(name=8, jointName="RightQuad_RightShin")
+        pyrosim.Send_Motor_Neuron(name=9, jointName="LeftHip_LeftQuad")
+        pyrosim.Send_Motor_Neuron(name=10, jointName="RightHip_RightQuad")
+        pyrosim.Send_Motor_Neuron(name=11, jointName="Pelvis_LeftHip")
+        pyrosim.Send_Motor_Neuron(name=12, jointName="Pelvis_RightHip")
+        pyrosim.Send_Motor_Neuron(name=13, jointName="Torso_Pelvis")
+        pyrosim.Send_Motor_Neuron(name=14, jointName="Torso_Head")
+        pyrosim.Send_Motor_Neuron(name=15, jointName="Torso_LeftShoulder")
+        pyrosim.Send_Motor_Neuron(name=16, jointName="Torso_RightShoulder")
+        pyrosim.Send_Motor_Neuron(name=17, jointName="LeftShoulder_LeftBicep")
+        pyrosim.Send_Motor_Neuron(name=18, jointName="RightShoulder_RightBicep")
+        pyrosim.Send_Motor_Neuron(name=19, jointName="LeftBicep_LeftForearm")
+        pyrosim.Send_Motor_Neuron(name=20, jointName="RightBicep_RightForearm")
 
         # __________Create Synapses__________
         for currentRow in range(0, c.numSensorNeurons):
@@ -235,7 +232,7 @@ class SOLUTION:
 
             elif mutation_strategy == "BODY":
                 randomIndex = random.randint(0, c.numBodyParams-1)
-                self.body_parameters[randomIndex] += random.random() * 2 * 0.1 - 0.1
+                self.body_parameters[randomIndex] += random.random() * 2 * 0.25 - 0.25
                 if self.body_parameters[randomIndex] <= 0:
                     self.body_parameters[randomIndex] = 0.001
 

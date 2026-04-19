@@ -18,15 +18,13 @@ class ROBOT:
         # Prepare the robot for simulation
         pyrosim.Prepare_To_Simulate(self.robotId)
 
-        self.handContactTime = 0
+        self.fallTime = 0
 
         self.Prepare_To_Sense()
 
         self.nn = NEURAL_NETWORK(f"brain{solutionID}.nndf")
 
         self.Prepare_To_Act()
-
-        os.system(f"del brain{solutionID}.nndf")
 
     def Prepare_To_Sense(self):
         self.sensors = {}
@@ -46,7 +44,10 @@ class ROBOT:
             self.sensors[sensor].Get_Value(t)
             # if hand is touching the ground, increment hand contact time
             if (sensor == 'LeftHand' or sensor == 'RightHand') and self.sensors[sensor].values[t]==1:
-                self.handContactTime += 1
+                self.fallTime += 1
+            if sensor == 'Torso' and self.sensors[sensor].values[t]==1:
+                self.fallTime += 2
+
 
     def Think(self):
         self.nn.Update(self.robotId)
@@ -64,13 +65,15 @@ class ROBOT:
 
         xPosition = position[0]
 
+        zPosition = position[2]
+
         roll, pitch, yaw = p.getEulerFromQuaternion(orientation)
 
         orientationError = np.sqrt(roll ** 2 + pitch ** 2)
 
-        handContactRate = self.handContactTime / c.loop_iterations
+        fallRate = self.fallTime / c.loop_iterations
 
-        fitness = (xPosition+5)/((0.5+orientationError)**2)
+        fitness = (xPosition+5) * zPosition / ((0.5+orientationError)**2)
 
         with open(f"tmp{self.solutionID}.txt", "w") as f:
             f.write(str(fitness))
