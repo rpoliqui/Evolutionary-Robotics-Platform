@@ -15,11 +15,11 @@ amplitude = -numpy.pi/4
 frequency = 8.8
 phaseOffset = 0
 
-motorJointRange = 0.5
+motorJointRange = 0.75
 
 #==================== Environment Constants ====================
 gravity = 9.81
 
 #==================== Evolution Constants ====================
-numberOfGenerations = 100
+numberOfGenerations = 300
 populationSize = 20

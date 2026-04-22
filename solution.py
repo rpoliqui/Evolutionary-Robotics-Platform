@@ -1,5 +1,7 @@
 import numpy
 import random
+import sys
+import subprocess
 import os
 import time
 import constants as c
@@ -48,8 +50,6 @@ class SOLUTION:
 
         self.hand_size = 0.3
 
-        self.torso_position = self.foot_height + self.shin_length + self.quad_length + self.pelvis_size + (self.torso_height/2)
-
         self.body_parameters = [self.torso_width,
                                 self.torso_height,
                                 self.torso_depth,
@@ -71,24 +71,54 @@ class SOLUTION:
                                 self.foot_height,
                                 self.hand_size]
 
+        self.torso_position = (self.body_parameters[18] + self.body_parameters[15] + self.body_parameters[13]
+                               + (self.body_parameters[11]/2) +(self.body_parameters[9]/2) + (self.body_parameters[1]/2))
 
     def Start_Simulation(self, directOrGui):
         self.Create_World()
         self.Create_Brain()
         self.Create_Body()
 
-        os.system(f"start /B python simulate.py {directOrGui} {self.myID} 2>nul")
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startupinfo.wShowWindow = subprocess.SW_HIDE
+
+        subprocess.Popen(
+            [sys.executable, "simulate.py", directOrGui, str(self.myID)],
+            startupinfo=startupinfo,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=subprocess.HIGH_PRIORITY_CLASS
+        )
 
     def Wait_For_Simulation_To_End(self):
         fitnessFileName = f"fitness{self.myID}.txt"
+        timeout = 60
+        start = time.time()
 
         while not os.path.exists(fitnessFileName):
-            time.sleep(0.01)
+            if time.time() - start > timeout:
+                print(f"Warning: Simulation {self.myID} timed out, assigning worst fitness")
+                self.fitness = float("-inf")
+                os.system(f"del brain{self.myID}.nndf")
+                os.system(f"del body{self.myID}.urdf")
+                os.system(f"del world{self.myID}.sdf")
+                os.system(f"del fitness{self.myID}.txt")
+                return
+            time.sleep(0.05)
 
-        time.sleep(0.01)
-        fitnessFile = open(fitnessFileName)
-        self.fitness = float(fitnessFile.read())
-        fitnessFile.close()
+        # Wait until file is fully written and readable
+        while True:
+            try:
+                fitnessFile = open(fitnessFileName)
+                content = fitnessFile.read()
+                fitnessFile.close()
+                if content:  # make sure file isn't empty
+                    self.fitness = float(content)
+                    break
+            except (PermissionError, ValueError):
+                time.sleep(0.01)
+
         os.system(f"del {fitnessFileName}")
 
 
@@ -108,6 +138,9 @@ class SOLUTION:
         pyrosim.Start_URDF(f"body{self.myID}.urdf")
 
         # __________Create the Root (Torso)__________
+        self.torso_position = (self.body_parameters[18] + self.body_parameters[15] + self.body_parameters[13]
+                               + (self.body_parameters[11] / 2) + (self.body_parameters[9] / 2) + (self.body_parameters[1] / 2))
+
         pyrosim.Send_Cube(name="Torso", pos=[self.start_position, 0, self.torso_position], size=[self.body_parameters[2], self.body_parameters[0], self.body_parameters[1]])
 
         # __________Create Connections to Torso__________

@@ -69,11 +69,15 @@ class ROBOT:
 
         roll, pitch, yaw = p.getEulerFromQuaternion(orientation)
 
+        roll = np.rad2deg(roll)
+        pitch = np.rad2deg(pitch)
+        yaw = np.rad2deg(yaw)
+
         orientationError = np.sqrt(roll ** 2 + pitch ** 2)
 
         fallRate = self.fallTime / c.loop_iterations
 
-        fitness = (xPosition+5) * zPosition / ((0.5+orientationError)**2)
+        fitness = (xPosition+5) * zPosition / orientationError
 
         with open(f"tmp{self.solutionID}.txt", "w") as f:
             f.write(str(fitness))

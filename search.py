@@ -1,7 +1,10 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import joblib
 from parallelHillClimber import PARALLEL_HILL_CLIMBER
+
+CONTINUE = True
 
 print("="*50)
 print("Clearing Old Files")
@@ -19,29 +22,55 @@ print("="*50)
 print("Evolving Robot A")
 print("="*50)
 
-phc_A = PARALLEL_HILL_CLIMBER('A')
+if CONTINUE:
+    try:
+        phc_A = joblib.load('PHC_A.joblib')
+        print("=" * 50)
+        print(f"Continuing From Last Run of {phc_A.total_generations} Generations")
+        print("=" * 50)
+    except FileNotFoundError:
+        phc_A = PARALLEL_HILL_CLIMBER('A')
+else:
+    phc_A = PARALLEL_HILL_CLIMBER('A')
 
-phc_A.Evolve()
+# phc_A.Evolve()
 
-phc_A.Plot_Data()
+# phc_A.Plot_Data()
 
 print("="*50)
 print("Evolving Robot B")
 print("="*50)
 
-# phc_B = PARALLEL_HILL_CLIMBER('B')
-#
-# phc_B.Evolve()
+if CONTINUE:
+    try:
+      phc_B = joblib.load('PHC_B.joblib')
+      print("=" * 50)
+      print(f"Continuing From Last Run of {phc_B.total_generations}")
+      print("=" * 50)
+    except FileNotFoundError:
+      phc_B = PARALLEL_HILL_CLIMBER('B')
 
-# phc_B.Plot_Data()
+else:
+    phc_B = PARALLEL_HILL_CLIMBER('B')
+
+
+phc_B.Evolve()
+
+phc_B.Plot_Data()
 
 print("="*50)
 print("Showing Results")
 print("="*50)
 
 phc_A.Show_Best()
+phc_A.fitness_data_file.close()
+phc_A.fitness_data_file = None
+joblib.dump(phc_A, 'PHC_A.joblib')
 
-# phc_B.Show_Best()
+phc_B.Show_Best()
+phc_B.fitness_data_file.close()
+phc_B.fitness_data_file = None
+joblib.dump(phc_B, 'PHC_B.joblib')
 
 print("="*50)
 print("Plotting Data")

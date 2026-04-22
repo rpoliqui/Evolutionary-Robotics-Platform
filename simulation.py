@@ -18,9 +18,9 @@ class SIMULATION:
         # Connect to GUI
         self.directOrGUI = directOrGUI
         if directOrGUI == "DIRECT":
-            self.physicsClient = p.connect(p.DIRECT)
+            self.physicsClient = connect_pybullet(p.DIRECT)
         else:
-            self.physicsClient = p.connect(p.GUI)
+            self.physicsClient = connect_pybullet(p.GUI)
 
         # Define data path for additional objects (Floor Plane)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
@@ -47,7 +47,6 @@ class SIMULATION:
     def Run(self):
         #__________Simulation Loop__________
         #=================================================================================================================
-        print(f"Starting Simulation {self.solutionID}")
         for t in range(c.loop_iterations):
             # Step Simulation
             p.stepSimulation()
@@ -63,10 +62,18 @@ class SIMULATION:
             # Sleep
             if self.directOrGUI == 'GUI':
                 time.sleep(c.loop_delay)
-        print(f"Finished Simulation {self.solutionID}")
 
     def Get_Fitness(self):
         self.robot.Get_Fitness()
 
     def __del__(self):
         p.disconnect()
+
+def connect_pybullet(mode, retries=5):
+    for i in range(retries):
+        try:
+            return p.connect(mode)
+        except Exception as e:
+            if i == retries - 1:
+                raise
+            time.sleep(0.1)
