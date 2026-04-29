@@ -18,6 +18,9 @@ class ROBOT:
         # Prepare the robot for simulation
         pyrosim.Prepare_To_Simulate(self.robotId)
 
+        position, orientation = p.getBasePositionAndOrientation(self.robotId)
+        self.starting_height = position[2]
+
         self.fallTime = 0
 
         self.Prepare_To_Sense()
@@ -73,11 +76,9 @@ class ROBOT:
         pitch = np.rad2deg(pitch)
         yaw = np.rad2deg(yaw)
 
-        orientationError = np.sqrt(roll ** 2 + pitch ** 2)
+        orientationError = np.sqrt(roll ** 2 + pitch ** 2 + yaw ** 2)
 
-        fallRate = self.fallTime / c.loop_iterations
-
-        fitness = (xPosition+5) * zPosition / orientationError
+        fitness = (xPosition+5) / (0.1+orientationError) / (0.1+np.abs(zPosition - self.starting_height))
 
         with open(f"tmp{self.solutionID}.txt", "w") as f:
             f.write(str(fitness))

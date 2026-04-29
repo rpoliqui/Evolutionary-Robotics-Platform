@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import joblib
 from parallelHillClimber import PARALLEL_HILL_CLIMBER
 
-CONTINUE = True
+CONTINUE = False
 
 print("="*50)
 print("Clearing Old Files")
@@ -33,9 +33,9 @@ if CONTINUE:
 else:
     phc_A = PARALLEL_HILL_CLIMBER('A')
 
-# phc_A.Evolve()
+phc_A.Evolve()
 
-# phc_A.Plot_Data()
+phc_A.Plot_Data()
 
 print("="*50)
 print("Evolving Robot B")
@@ -76,13 +76,13 @@ print("="*50)
 print("Plotting Data")
 print("="*50)
 
-# df_A = pd.read_csv("fitness_data_A.csv")
-# df_B = pd.read_csv("fitness_data_B.csv")
-#
-# df = pd.merge(df_A, df_B, on='Generation')
-#
-# df.plot(x="Generation", y=["Max Fitness A", "Max Fitness B"])
-# plt.savefig("Max Fitness AB")
-#
-# df.plot(x="Generation", y=["Average Fitness A", "Average Fitness B"])
-# plt.savefig("Average Fitness AB")
+df_A = pd.read_csv("fitness_data_A.csv")
+df_B = pd.read_csv("fitness_data_B.csv")
+
+df = pd.merge(df_A, df_B, on='Generation')
+
+df.plot(x="Generation", y=["Max Fitness A", "Max Fitness B"])
+plt.savefig("Max Fitness AB")
+
+df.plot(x="Generation", y=["Average Fitness A", "Average Fitness B"])
+plt.savefig("Average Fitness AB")

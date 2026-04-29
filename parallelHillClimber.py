@@ -70,7 +70,7 @@ class PARALLEL_HILL_CLIMBER:
         self.Save_Data(currentGeneration)
         self.Print()
         endTime = time.time()
-        print(f"Generation {currentGeneration+1} of {self.total_generations}")
+        print(f"{self.version} Generation {currentGeneration+1} of {self.total_generations}")
         print(f"Generation Time: {endTime-startTime} seconds")
         print(f"Total Time: {(endTime - self.startTime)/60} minutes ")
         self.Select()
