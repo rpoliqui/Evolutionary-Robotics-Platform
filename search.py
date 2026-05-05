@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import joblib
 from parallelHillClimber import PARALLEL_HILL_CLIMBER
 
-CONTINUE = False
+CONTINUE = True
 
 print("="*50)
 print("Clearing Old Files")
